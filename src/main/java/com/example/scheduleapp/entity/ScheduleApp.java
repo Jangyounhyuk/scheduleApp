@@ -6,20 +6,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class ScheduleApp {
+
+    @Setter
     private Long id;
     private String name;
     private String password;
     private String todo;
     private String date;
 
-    public ScheduleApp(ScheduleAppRequestDto scheduleAppRequestDto) {
-        this.name = scheduleAppRequestDto.getName();
-        this.password = scheduleAppRequestDto.getPassword();
-        this.todo = scheduleAppRequestDto.getTodo();
-        this.date = scheduleAppRequestDto.getDate();
+    public ScheduleApp(String name, String password, String todo, String date) {
+        this.name = name;
+        this.password = password;
+        this.todo = todo;
+        this.date = date;
     }
 
     public void update(ScheduleAppRequestDto requestDto) {
