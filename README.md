@@ -1,7 +1,6 @@
 API 명세서
 
-![image](https://github.com/user-attachments/assets/7121014b-91f9-4832-80ee-76a658a19509)
-
+![image](https://github.com/user-attachments/assets/87e0d155-c727-43ab-bb19-46f414b38e04)
 
 ERD
 
