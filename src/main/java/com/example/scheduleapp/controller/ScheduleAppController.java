@@ -15,10 +15,11 @@ public class ScheduleAppController {
     @PostMapping
     public ScheduleAppResponseDto createSchedule(@RequestBody ScheduleAppRequestDto requestDto) {
         Long scheduleId = scheduleList.isEmpty() ? 1 : Collections.max(scheduleList.keySet()) + 1;
-        ScheduleApp scheduleApp = new ScheduleApp(requestDto);
+        ScheduleApp scheduleApp = new ScheduleApp(scheduleId, requestDto.getName(), requestDto.getPassword(), requestDto.getTodo(), requestDto.getDate());
         scheduleList.put(scheduleId, scheduleApp);
         return new ScheduleAppResponseDto(scheduleApp);
     }
+
     @GetMapping
     public List<ScheduleAppResponseDto> findAllSchedules() {
         List<ScheduleAppResponseDto> responseLIst = new ArrayList<>();
