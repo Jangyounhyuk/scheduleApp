@@ -4,11 +4,14 @@ import com.example.scheduleapp.dto.ScheduleAppResponseDto;
 import com.example.scheduleapp.entity.ScheduleApp;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScheduleAppRepository {
 
-    ScheduleApp saveSchedule(ScheduleApp scheduleApp);
+    ScheduleAppResponseDto saveSchedule(ScheduleApp scheduleApp);
     List<ScheduleAppResponseDto> findAllSchedules();
-    ScheduleApp findScheduleById(Long id);
-    void deleteSchedule(Long id);
+    Optional<ScheduleApp> findScheduleById(Long id);
+    ScheduleApp findScheduleByIdOrElseThrow(Long id);
+    int updateSchedule(Long id, String name, String password, String todo, String date);
+    int deleteSchedule(Long id);
 }

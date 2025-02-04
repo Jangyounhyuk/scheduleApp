@@ -6,6 +6,7 @@ import com.example.scheduleapp.entity.ScheduleApp;
 import com.example.scheduleapp.repository.ScheduleAppRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -25,9 +26,7 @@ public class ScheduleAppServiceImpl implements ScheduleAppService {
 
         ScheduleApp scheduleApp = new ScheduleApp(requestDto.getName(), requestDto.getPassword(), requestDto.getTodo(), requestDto.getDate());
 
-        ScheduleApp savedSchedule = scheduleAppRepository.saveSchedule(scheduleApp);
-
-        return new ScheduleAppResponseDto(savedSchedule);
+        return scheduleAppRepository.saveSchedule(scheduleApp);
     }
 
     @Override
@@ -39,41 +38,37 @@ public class ScheduleAppServiceImpl implements ScheduleAppService {
     @Override
     public ScheduleAppResponseDto findScheduleById(Long id) {
 
-        ScheduleApp schedule = scheduleAppRepository.findScheduleById(id);
+        ScheduleApp scheduleApp = scheduleAppRepository.findScheduleByIdOrElseThrow(id);
 
-        if(schedule == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-        }
-
-        return new ScheduleAppResponseDto(schedule);
+        return new ScheduleAppResponseDto(scheduleApp);
     }
 
+    @Transactional
     @Override
     public ScheduleAppResponseDto updateSchedule(Long id, ScheduleAppRequestDto requestDto) {
-
-        ScheduleApp schedule = scheduleAppRepository.findScheduleById(id);
-
-        if(schedule == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-        }
 
         if(requestDto.getName() == null || requestDto.getPassword() == null || requestDto.getTodo() == null || requestDto.getDate() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The contents are required values.");
         }
 
-        schedule.update(requestDto);
+        int updatedRow = scheduleAppRepository.updateSchedule(id, requestDto.getName(), requestDto.getPassword(), requestDto.getTodo(), requestDto.getDate());
 
-        return new ScheduleAppResponseDto(schedule);
+        if(updatedRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+
+        ScheduleApp scheduleApp = scheduleAppRepository.findScheduleByIdOrElseThrow(id);
+
+        return new ScheduleAppResponseDto(scheduleApp);
     }
 
     @Override
     public void deleteSchedule(Long id) {
-        ScheduleApp schedule = scheduleAppRepository.findScheduleById(id);
 
-        if(schedule == null) {
+        int deletedRow = scheduleAppRepository.deleteSchedule(id);
+
+        if(deletedRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
-
-        scheduleAppRepository.deleteSchedule(id);
     }
 }

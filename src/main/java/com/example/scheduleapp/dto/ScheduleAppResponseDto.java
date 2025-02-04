@@ -1,9 +1,11 @@
 package com.example.scheduleapp.dto;
 
 import com.example.scheduleapp.entity.ScheduleApp;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class ScheduleAppResponseDto {
     private Long id;
     private String name;
